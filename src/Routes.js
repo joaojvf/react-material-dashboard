@@ -8,7 +8,6 @@ import {
   Dashboard as DashboardView,
   UserList as UserListView,
   SignIn as SignInView,
-  NotFound as NotFoundView
 } from './views';
 
 const Routes = () => {
