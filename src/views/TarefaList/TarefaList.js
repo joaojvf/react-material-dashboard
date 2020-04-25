@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
-import { UsersToolbar, UsersTable } from './components';
+import { TarefasToolbar, TarefasTable } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,19 +12,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const UserList = () => {
+const TarefaList = () => {
   const classes = useStyles();
 
-  const [users] = useState([]);
+  const [tarefas] = useState([]);
 
   return (
     <div className={classes.root}>
-      <UsersToolbar />
+      <TarefasToolbar />
       <div className={classes.content}>
-        <UsersTable users={users} />
+        <TarefasTable tarefas={tarefas} />
       </div>
     </div>
   );
 };
 
-export default UserList;
+export default TarefaList;
