@@ -28,7 +28,6 @@ const TarefaList = () => {
   const [mensagemDialog, setmensagemDialog] = useState('Deu certo');
 
   const TAREFA_URL = 'https://minhastarefas-api.herokuapp.com/tarefas';
-  const headers = { 'x-tenant-id': 'jvf@teste.com' };
 
   useEffect(() => {
     listarTarefas();
@@ -37,7 +36,7 @@ const TarefaList = () => {
   const salvar = tarefa => {
     axios
       .post(TAREFA_URL, tarefa, {
-        headers: headers
+        headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
       })
       .then(response => {
         const novaTarefa = response.data;
@@ -53,7 +52,9 @@ const TarefaList = () => {
 
   const listarTarefas = () => {
     axios
-      .get(TAREFA_URL, { headers: headers })
+      .get(TAREFA_URL, {
+        headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
+      })
       .then(response => {
         const listaDeTarefas = response.data;
         console.log('Lista de tarefas: ', listaDeTarefas);
@@ -67,7 +68,7 @@ const TarefaList = () => {
   const alterarStatus = id => {
     axios
       .patch(`${TAREFA_URL}/${id}`, null, {
-        headers: headers
+        headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
       })
       .then(response => {
         const lista = [...tarefas];
@@ -87,7 +88,7 @@ const TarefaList = () => {
   const deletar = id => {
     axios
       .delete(`${TAREFA_URL}/${id}`, {
-        headers: headers
+        headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
       })
       .then(response => {
         setmensagemDialog('Item removido com sucesso!');
