@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
@@ -42,14 +42,19 @@ const TarefasToolbar = props => {
   const [descricao, setDescricao] = useState('');
   const [categoria, setCategoria] = useState('');
 
-  
   const classes = useStyles();
 
-const submit = (event) => {
-  event.preventDefault();
-  console.log("Valor da descrição: ", descricao);
-  console.log("Valor da categoria: ", categoria);
-}
+  const submit = event => {
+    event.preventDefault();
+    const tarefa = {
+      categoria: categoria,
+      descricao: descricao
+    };
+
+    props.salvar(tarefa);
+    setDescricao('');
+    setCategoria('');
+  };
 
   return (
     <div {...rest} className={clsx(classes.root, className)}>
@@ -65,17 +70,19 @@ const submit = (event) => {
               label="Descrição:"
               fullWidth={true}
               value={descricao}
-              onChange = {e => setDescricao(e.target.value)}
+              onChange={e => setDescricao(e.target.value)}
             />
           </Grid>
 
           <Grid item md={4}>
             <FormControl fullWidth>
               <InputLabel>Categoria: </InputLabel>
-              <Select value={categoria} onChange = {e => setCategoria(e.target.value)}>
+              <Select
+                value={categoria}
+                onChange={e => setCategoria(e.target.value)}>
                 <MenuItem value="">Selecione...</MenuItem>
                 <MenuItem value={'TRABALHO'}>Trabalho</MenuItem>
-                <MenuItem value={'ESTUDOS'}>Estudo</MenuItem>
+                <MenuItem value={'ESTUDOS'}>Estudos</MenuItem>
                 <MenuItem value={'OUTROS'}>Outros</MenuItem>
               </Select>
             </FormControl>
