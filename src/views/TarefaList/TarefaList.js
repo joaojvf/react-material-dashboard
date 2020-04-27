@@ -59,7 +59,7 @@ const TarefaList = () => {
       })
       .then(response => {
         console.log('Retorno alterar status: ', response.status);
-        const lista  = [...tarefas];
+        const lista = [...tarefas];
         lista.forEach(tarefa => {
           if (tarefa.id === id) {
             tarefa.done = true;
@@ -72,11 +72,30 @@ const TarefaList = () => {
       });
   };
 
+  const deletar = id => {
+    axios
+      .delete(`${TAREFA_URL}/${id}`, {
+        headers: headers
+      })
+      .then(response => {
+        console.log('Sucesso ao deletar: ', response.data);
+
+        const lista = tarefas.filter(tarefa => tarefa.id != id);
+        setTarefas(lista);
+      })
+      .catch(erro => {
+        console.log('Erro ao deletar: ', erro);
+      });
+  };
   return (
     <div className={classes.root}>
       <TarefasToolbar salvar={salvar} />
       <div className={classes.content}>
-        <TarefasTable alterarStatus={alterarStatus} tarefas={tarefas} />
+        <TarefasTable
+          deleteAction={deletar}
+          alterarStatus={alterarStatus}
+          tarefas={tarefas}
+        />
       </div>
     </div>
   );

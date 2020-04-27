@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -18,6 +17,7 @@ import {
 
 import TimerIcon from '@material-ui/icons/Timer';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -56,6 +56,7 @@ const TarefasTable = props => {
                   <TableCell>Categoria</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell></TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -69,8 +70,16 @@ const TarefasTable = props => {
                         {tarefa.done ? 'Feita' : 'Pendente'}
                       </TableCell>
                       <TableCell>
-                        <IconButton onClick={e => props.alterarStatus(tarefa.id)} color="secondary">
+                        <IconButton
+                          onClick={e => props.alterarStatus(tarefa.id)}
+                          color="secondary">
                           {tarefa.done ? <DoneAllIcon /> : <TimerIcon />}
+                        </IconButton>
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={e => props.deleteAction(tarefa.id)}>
+                          <DeleteIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>
