@@ -31,8 +31,8 @@ const TarefaList = () => {
         headers: headers
       })
       .then(response => {
-        const novaTarefa = response.data
-        setTarefas([...tarefas, novaTarefa])
+        const novaTarefa = response.data;
+        setTarefas([...tarefas, novaTarefa]);
       })
       .catch(erro => {
         console.log('Erro api salvar: ', erro);
@@ -52,11 +52,31 @@ const TarefaList = () => {
       });
   };
 
+  const alterarStatus = id => {
+    axios
+      .patch(`${TAREFA_URL}/${id}`, null, {
+        headers: headers
+      })
+      .then(response => {
+        console.log('Retorno alterar status: ', response.status);
+        const lista  = [...tarefas];
+        lista.forEach(tarefa => {
+          if (tarefa.id === id) {
+            tarefa.done = true;
+          }
+        });
+        setTarefas(lista);
+      })
+      .catch(erro => {
+        console.erro('Erro alterar status: ', erro);
+      });
+  };
+
   return (
     <div className={classes.root}>
       <TarefasToolbar salvar={salvar} />
       <div className={classes.content}>
-        <TarefasTable tarefas={tarefas} />
+        <TarefasTable alterarStatus={alterarStatus} tarefas={tarefas} />
       </div>
     </div>
   );
