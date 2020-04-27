@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  Button
+} from '@material-ui/core';
 
 import { TarefasToolbar, TarefasTable } from './components';
 
@@ -17,6 +24,8 @@ const useStyles = makeStyles(theme => ({
 const TarefaList = () => {
   const classes = useStyles();
   const [tarefas, setTarefas] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [mensagemDialog, setmensagemDialog] = useState('Deu certo');
 
   const TAREFA_URL = 'https://minhastarefas-api.herokuapp.com/tarefas';
   const headers = { 'x-tenant-id': 'jvf@teste.com' };
@@ -33,9 +42,12 @@ const TarefaList = () => {
       .then(response => {
         const novaTarefa = response.data;
         setTarefas([...tarefas, novaTarefa]);
+        setmensagemDialog('Item adicionado com sucesso!');
+        setOpenDialog(true);
       })
       .catch(erro => {
-        console.log('Erro api salvar: ', erro);
+        setmensagemDialog('Ocorreu um erro ao adicionar um item.');
+        setOpenDialog(true);
       });
   };
 
@@ -58,7 +70,6 @@ const TarefaList = () => {
         headers: headers
       })
       .then(response => {
-        console.log('Retorno alterar status: ', response.status);
         const lista = [...tarefas];
         lista.forEach(tarefa => {
           if (tarefa.id === id) {
@@ -66,9 +77,10 @@ const TarefaList = () => {
           }
         });
         setTarefas(lista);
+        console.log('Item alterado com sucesso: ', response.data);
       })
       .catch(erro => {
-        console.erro('Erro alterar status: ', erro);
+        console.log('Erro alterar status: ', erro);
       });
   };
 
@@ -78,13 +90,14 @@ const TarefaList = () => {
         headers: headers
       })
       .then(response => {
-        console.log('Sucesso ao deletar: ', response.data);
-
+        setmensagemDialog('Item removido com sucesso!');
+        setOpenDialog(true);
         const lista = tarefas.filter(tarefa => tarefa.id != id);
         setTarefas(lista);
       })
       .catch(erro => {
-        console.log('Erro ao deletar: ', erro);
+        setmensagemDialog('Ocorreu um erro ao adicionar um item.');
+        setOpenDialog(true);
       });
   };
   return (
@@ -97,6 +110,13 @@ const TarefaList = () => {
           tarefas={tarefas}
         />
       </div>
+      <Dialog open={openDialog} onClose={e => setOpenDialog(false)}>
+        <DialogTitle>Atenção </DialogTitle>
+        <DialogContent>{mensagemDialog}</DialogContent>
+        <DialogActions>
+          <Button onClick={e => setOpenDialog(false)}>Fechar</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
