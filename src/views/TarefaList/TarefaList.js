@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import {
+  listar
+} from '../../store/tarefasReducer'
+
 import { makeStyles } from '@material-ui/styles';
 import {
   Dialog,
@@ -21,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TarefaList = () => {
+const TarefaList = (props) => {
   const classes = useStyles();
   const [tarefas, setTarefas] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -30,7 +36,7 @@ const TarefaList = () => {
   const TAREFA_URL = 'https://minhastarefas-api.herokuapp.com/tarefas';
 
   useEffect(() => {
-    listarTarefas();
+    props.listar();
   }, []);
 
   const salvar = tarefa => {
@@ -47,21 +53,6 @@ const TarefaList = () => {
       .catch(erro => {
         setmensagemDialog('Ocorreu um erro ao adicionar um item.');
         setOpenDialog(true);
-      });
-  };
-
-  const listarTarefas = () => {
-    axios
-      .get(TAREFA_URL, {
-        headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
-      })
-      .then(response => {
-        const listaDeTarefas = response.data;
-        console.log('Lista de tarefas: ', listaDeTarefas);
-        setTarefas(listaDeTarefas);
-      })
-      .catch(erro => {
-        console.log('Erro no get da API:', erro);
       });
   };
 
@@ -108,7 +99,7 @@ const TarefaList = () => {
         <TarefasTable
           deleteAction={deletar}
           alterarStatus={alterarStatus}
-          tarefas={tarefas}
+          tarefas={props.tarefas}
         />
       </div>
       <Dialog open={openDialog} onClose={e => setOpenDialog(false)}>
@@ -122,4 +113,11 @@ const TarefaList = () => {
   );
 };
 
-export default TarefaList;
+const mapStateToProps = state => ({
+  tarefas: state.tarefas.tarefas
+});
+
+const mapDispatchToProps = dispatch => 
+  bindActionCreators({listar}, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps) (TarefaList);
