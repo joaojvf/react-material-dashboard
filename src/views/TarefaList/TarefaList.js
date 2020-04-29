@@ -3,8 +3,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
   listar,
-  salvar
-} from '../../store/tarefasReducer'
+  salvar,
+  deletar,
+  alterarStatus
+} from '../../store/tarefasReducer';
 
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -28,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TarefaList = (props) => {
+const TarefaList = props => {
   const classes = useStyles();
   const [tarefas, setTarefas] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -40,50 +42,13 @@ const TarefaList = (props) => {
     props.listar();
   }, []);
 
-
-  const alterarStatus = id => {
-    axios
-      .patch(`${TAREFA_URL}/${id}`, null, {
-        headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
-      })
-      .then(response => {
-        const lista = [...tarefas];
-        lista.forEach(tarefa => {
-          if (tarefa.id === id) {
-            tarefa.done = true;
-          }
-        });
-        setTarefas(lista);
-        console.log('Item alterado com sucesso: ', response.data);
-      })
-      .catch(erro => {
-        console.log('Erro alterar status: ', erro);
-      });
-  };
-
-  const deletar = id => {
-    axios
-      .delete(`${TAREFA_URL}/${id}`, {
-        headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
-      })
-      .then(response => {
-        setmensagemDialog('Item removido com sucesso!');
-        setOpenDialog(true);
-        const lista = tarefas.filter(tarefa => tarefa.id != id);
-        setTarefas(lista);
-      })
-      .catch(erro => {
-        setmensagemDialog('Ocorreu um erro ao adicionar um item.');
-        setOpenDialog(true);
-      });
-  };
   return (
     <div className={classes.root}>
       <TarefasToolbar salvar={props.salvar} />
       <div className={classes.content}>
         <TarefasTable
-          deleteAction={deletar}
-          alterarStatus={alterarStatus}
+          deleteAction={props.deletar}
+          alterarStatus={props.alterarStatus}
           tarefas={props.tarefas}
         />
       </div>
@@ -102,7 +67,7 @@ const mapStateToProps = state => ({
   tarefas: state.tarefas.tarefas
 });
 
-const mapDispatchToProps = dispatch => 
-  bindActionCreators({listar, salvar}, dispatch)
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ listar, salvar, deletar, alterarStatus }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps) (TarefaList);
+export default connect(mapStateToProps, mapDispatchToProps)(TarefaList);
