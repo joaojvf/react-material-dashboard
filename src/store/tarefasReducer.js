@@ -13,18 +13,28 @@ const ACTIONS = {
 };
 
 const ESTADO_INICIAL = {
-  tarefas: []
+  tarefas: [],
+  quantidade: 0
 };
 export const tarefaReducer = (state = ESTADO_INICIAL, action) => {
   switch (action.type) {
     case ACTIONS.LISTAR:
-      return { ...state, tarefas: action.tarefas };
+      return {
+        ...state,
+        tarefas: action.tarefas,
+        quantidade: action.tarefas.length
+      };
     case ACTIONS.ADD:
-      return { ...state, tarefas: [...state.tarefas, action.tarefa] };
+      return {
+        ...state,
+        tarefas: [...state.tarefas, action.tarefa],
+        quantidade: action.tarefas.length
+      };
     case ACTIONS.REMOVER:
       return {
         ...state,
-        tarefas: state.tarefas.filter(tarefa => tarefa.id !== action.id)
+        tarefas: state.tarefas.filter(tarefa => tarefa.id !== action.id),
+        quantidade: action.tarefas.length
       };
     case ACTIONS.UPDATE_STATUS:
       const lista = [...state.tarefas];
@@ -64,10 +74,13 @@ export function salvar(tarefa) {
         headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
       })
       .then(response => {
-        dispatch([{
-          type: ACTIONS.ADD,
-          tarefa: response.data
-        }, mostrarMensagem('Tarefa Salva com Sucesso!')]);
+        dispatch([
+          {
+            type: ACTIONS.ADD,
+            tarefa: response.data
+          },
+          mostrarMensagem('Tarefa Salva com Sucesso!')
+        ]);
       })
       .catch(erro => {
         console.log('Erro ao tentar salvar: ', erro);
@@ -82,10 +95,13 @@ export function deletar(id) {
         headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
       })
       .then(response => {
-        dispatch([{
-          type: ACTIONS.REMOVER,
-          id: id
-        }, mostrarMensagem("Tarefa excluída com sucesso!")]);
+        dispatch([
+          {
+            type: ACTIONS.REMOVER,
+            id: id
+          },
+          mostrarMensagem('Tarefa excluída com sucesso!')
+        ]);
       });
   };
 }
@@ -97,10 +113,13 @@ export function alterarStatus(id) {
         headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
       })
       .then(response => {
-        dispatch([{
-          type: ACTIONS.UPDATE_STATUS,
-          id: id
-        }, mostrarMensagem("Tarefa atualizada com sucesso!")]);
+        dispatch([
+          {
+            type: ACTIONS.UPDATE_STATUS,
+            id: id
+          },
+          mostrarMensagem('Tarefa atualizada com sucesso!')
+        ]);
       });
   };
 }
