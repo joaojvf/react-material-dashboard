@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { func } from 'prop-types';
+import { mostrarMensagem } from './mensagensReducer';
+
 const http = axios.create({
   baseURL: 'https://minhastarefas-api.herokuapp.com'
 });
@@ -63,10 +64,10 @@ export function salvar(tarefa) {
         headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
       })
       .then(response => {
-        dispatch({
+        dispatch([{
           type: ACTIONS.ADD,
           tarefa: response.data
-        });
+        }, mostrarMensagem('Tarefa Salva com Sucesso!')]);
       })
       .catch(erro => {
         console.log('Erro ao tentar salvar: ', erro);
@@ -81,10 +82,10 @@ export function deletar(id) {
         headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
       })
       .then(response => {
-        dispatch({
+        dispatch([{
           type: ACTIONS.REMOVER,
           id: id
-        });
+        }, mostrarMensagem("Tarefa excluída com sucesso!")]);
       });
   };
 }
@@ -96,10 +97,10 @@ export function alterarStatus(id) {
         headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
       })
       .then(response => {
-        dispatch({
+        dispatch([{
           type: ACTIONS.UPDATE_STATUS,
           id: id
-        });
+        }, mostrarMensagem("Tarefa atualizada com sucesso!")]);
       });
   };
 }

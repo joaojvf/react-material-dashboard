@@ -8,6 +8,10 @@ import {
   alterarStatus
 } from '../../store/tarefasReducer';
 
+import {
+  esconderMensagem,
+} from '../../store/mensagensReducer';
+
 import { makeStyles } from '@material-ui/styles';
 import {
   Dialog,
@@ -18,8 +22,6 @@ import {
 } from '@material-ui/core';
 
 import { TarefasToolbar, TarefasTable } from './components';
-
-import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,11 +34,6 @@ const useStyles = makeStyles(theme => ({
 
 const TarefaList = props => {
   const classes = useStyles();
-  const [tarefas, setTarefas] = useState([]);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [mensagemDialog, setmensagemDialog] = useState('Deu certo');
-
-  const TAREFA_URL = 'https://minhastarefas-api.herokuapp.com/tarefas';
 
   useEffect(() => {
     props.listar();
@@ -52,11 +49,11 @@ const TarefaList = props => {
           tarefas={props.tarefas}
         />
       </div>
-      <Dialog open={openDialog} onClose={e => setOpenDialog(false)}>
+      <Dialog open={props.openDialog} onClose={props.esconderMensagem}>
         <DialogTitle>Atenção </DialogTitle>
-        <DialogContent>{mensagemDialog}</DialogContent>
+        <DialogContent>{props.mensagem}</DialogContent>
         <DialogActions>
-          <Button onClick={e => setOpenDialog(false)}>Fechar</Button>
+          <Button onClick={props.esconderMensagem}>Fechar</Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -64,10 +61,21 @@ const TarefaList = props => {
 };
 
 const mapStateToProps = state => ({
-  tarefas: state.tarefas.tarefas
+  tarefas: state.tarefas.tarefas,
+  mensagem: state.mensagens.mensagem,
+  openDialog: state.mensagens.mostrarMensagem
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ listar, salvar, deletar, alterarStatus }, dispatch);
+  bindActionCreators(
+    {
+      listar,
+      salvar,
+      deletar,
+      alterarStatus,
+      esconderMensagem
+    },
+    dispatch
+  );
 
 export default connect(mapStateToProps, mapDispatchToProps)(TarefaList);
