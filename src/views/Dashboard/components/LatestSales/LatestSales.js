@@ -43,10 +43,10 @@ const LatestSales = props => {
             size="small"
             variant="text"
           >
-            Last 7 days <ArrowDropDownIcon />
+            Meses <ArrowDropDownIcon />
           </Button>
         }
-        title="Latest Sales"
+        title="Comparação entre Tarefas por"
       />
       <Divider />
       <CardContent>
