@@ -33,7 +33,7 @@ const Dashboard = (props) => {
     <div className={classes.root}>
       <Grid container spacing={4}>
         <Grid item lg={3} sm={6} xl={3} xs={12}>
-          <Budget />
+          <Budget quantidadeTarefas = {props.notificacoes}/>
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12}>
           <TotalUsers />
@@ -62,7 +62,8 @@ const Dashboard = (props) => {
 };
 
 const mapStateToProps = state => ({
-  percentualConcluido: state.tarefas.percentualConcluido
+  percentualConcluido: state.tarefas.percentualConcluido,
+  notificacoes: state.tarefas.quantidade
 });
 
 const mapDispatchToProps = dispatch =>
