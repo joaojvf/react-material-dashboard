@@ -11,6 +11,8 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import './assets/scss/index.scss';
 import validators from './common/validators';
 import Routes from './Routes';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
 
 const browserHistory = createBrowserHistory();
 
@@ -22,6 +24,20 @@ validate.validators = {
   ...validate.validators,
   ...validators
 };
+
+theme.palette.primary.main =  '#414141'
+// const newTheme = createMuiTheme({
+//   palette: {
+//     secondary: {
+//       main: '#414141'
+//     },
+//     primary: {
+//       main: '#414141',
+//       dark: true,
+//     },
+    
+//   }
+// });
 
 export default class App extends Component {
   render() {
