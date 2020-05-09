@@ -24,14 +24,14 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 700
   },
   avatar: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: "#2979ff",
     color: theme.palette.primary.contrastText,
     height: 56,
     width: 56
   },
   icon: {
     height: 32,
-    width: 32
+    width: 32,
   },
   progress: {
     marginTop: theme.spacing(3)
@@ -65,8 +65,8 @@ const TasksProgress = props => {
             <Typography variant="h3">{props.percentualConcluido}%</Typography>
           </Grid>
           <Grid item>
-            <Avatar className={classes.avatar}>
-              <InsertChartIcon className={classes.icon} />
+            <Avatar className={classes.avatar} >
+              <InsertChartIcon className={classes.icon}  />
             </Avatar>
           </Grid>
         </Grid>

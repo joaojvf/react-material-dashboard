@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
-import { listar, alterarStatus } from '../../store/tarefasReducer';
+import { listar } from '../../store/tarefasReducer';
 import {
   Budget,
   TotalUsers,
@@ -42,13 +42,13 @@ const Dashboard = (props) => {
           <TasksProgress percentualConcluido={props.percentualConcluido} />
         </Grid>
         <Grid item lg={3} sm={6} xl={3} xs={12}>
-          <TotalProfit />
+          <TotalProfit tarefaParaConcluir = {props.tarefaParaConcluir}/>
         </Grid>
         <Grid item lg={8} md={12} xl={9} xs={12}>
           <LatestSales />
         </Grid>
         <Grid item lg={4} md={6} xl={3} xs={12}>
-          <UsersByDevice />
+          <UsersByDevice tarefasConcluidas = {props.tarefasConcluidas} tarefaParaConcluir = {props.tarefaParaConcluir}/>
         </Grid>
         <Grid item lg={4} md={6} xl={3} xs={12}>
           {/* <LatestProducts /> */}
@@ -63,14 +63,16 @@ const Dashboard = (props) => {
 
 const mapStateToProps = state => ({
   percentualConcluido: state.tarefas.percentualConcluido,
-  notificacoes: state.tarefas.quantidade
+  notificacoes: state.tarefas.quantidade,
+  tarefaParaConcluir: 100 - state.tarefas.percentualConcluido,
+  tarefasConcluidas: state.tarefas.percentualConcluido
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       listar,
-      alterarStatus
+      
     },
     dispatch
   );

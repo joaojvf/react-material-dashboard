@@ -15,7 +15,8 @@ const ACTIONS = {
 const ESTADO_INICIAL = {
   tarefas: [],
   quantidade: 0,
-  percentualConcluido: 100
+  percentualConcluido: 100,
+  tarefasParaConluir: 0
 };
 export const tarefaReducer = (state = ESTADO_INICIAL, action) => {
   switch (action.type) {
@@ -28,7 +29,8 @@ export const tarefaReducer = (state = ESTADO_INICIAL, action) => {
         ...state,
         tarefas: action.tarefas,
         quantidade: action.tarefas.length,
-        percentualConcluido: atualizaConcluidas(obj)
+        percentualConcluido: atualizaConcluidas(obj),
+        tarefasParaConluir: atualizaTarefasParaConluir(obj)
 
       };
     case ACTIONS.ADD:
@@ -36,14 +38,16 @@ export const tarefaReducer = (state = ESTADO_INICIAL, action) => {
         ...state,
         tarefas: [...state.tarefas, action.tarefa],
         quantidade: action.tarefas.length,
-        percentualConcluido: atualizaConcluidas(state)
+        percentualConcluido: atualizaConcluidas(state),
+        tarefasParaConluir: atualizaTarefasParaConluir(state)
       };
     case ACTIONS.REMOVER:
       return {
         ...state,
         tarefas: state.tarefas.filter(tarefa => tarefa.id !== action.id),
         quantidade: action.tarefas.length,
-        percentualConcluido: atualizaConcluidas(state)
+        percentualConcluido: atualizaConcluidas(state),
+        tarefasParaConluir: atualizaTarefasParaConluir(state)
       };
     case ACTIONS.UPDATE_STATUS:
       const lista = [...state.tarefas];
@@ -56,7 +60,8 @@ export const tarefaReducer = (state = ESTADO_INICIAL, action) => {
       return {
         ...state,
         tarefas: lista,
-        percentualConcluido: atualizaConcluidas(state)
+        percentualConcluido: atualizaConcluidas(state),
+        tarefasParaConluir: atualizaTarefasParaConluir(state)
       };
 
     default:
@@ -104,12 +109,24 @@ export function atualizaConcluidas(state) {
   let quantidadeTarefasConcluidas = 0;
   state.tarefas.forEach(tarefa => {
     if (tarefa.done) {
-      quantidadeTarefasConcluidas= quantidadeTarefasConcluidas +1;
+      quantidadeTarefasConcluidas++;
     }
-  });
+  });  
 
   return (quantidadeTarefasConcluidas / state.quantidade) * 100
 }
+
+export function atualizaTarefasParaConluir(state) {
+  let quantidadeTarefasParaConcluir = 0;
+  state.tarefas.forEach(tarefa => {
+    if (!tarefa.done) {
+      quantidadeTarefasParaConcluir++;
+    }
+  });  
+
+  return quantidadeTarefasParaConcluir; 
+}
+
 export function deletar(id) {
   return dispatch => {
     http

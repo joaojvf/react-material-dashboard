@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import AssignmentLateIcon from '@material-ui/icons/AssignmentLate';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,18 +52,18 @@ const TotalProfit = props => {
               gutterBottom
               variant="body2"
             >
-              TOTAL DE TAREFAS NÃO CONCLUÍDAS
+             TAREFAS A CONCLUIR
             </Typography>
             <Typography
               color="inherit"
               variant="h3"
             >
-              XXX
+              {props.tarefaParaConcluir}
             </Typography>
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
-              <AttachMoneyIcon className={classes.icon} />
+              <AssignmentLateIcon className={classes.icon} />
             </Avatar>
           </Grid>
         </Grid>

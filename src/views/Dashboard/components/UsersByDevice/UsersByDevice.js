@@ -11,10 +11,9 @@ import {
   Divider,
   Typography
 } from '@material-ui/core';
-import LaptopMacIcon from '@material-ui/icons/LaptopMac';
-import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
+import AssignmentLateIcon from '@material-ui/icons/AssignmentLate';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import TabletMacIcon from '@material-ui/icons/TabletMac';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,7 +46,7 @@ const UsersByDevice = props => {
   const data = {
     datasets: [
       {
-        data: [63, 15, 22],
+        data: [props.tarefasConcluidas, props.tarefaParaConcluir],
         backgroundColor: [
           theme.palette.primary.main,
           theme.palette.error.main,
@@ -58,7 +57,7 @@ const UsersByDevice = props => {
         hoverBorderColor: theme.palette.white
       }
     ],
-    labels: ['Desktop', 'Tablet', 'Mobile']
+    labels: ['Concluídas', 'Para Concluir']
   };
 
   const options = {
@@ -83,24 +82,18 @@ const UsersByDevice = props => {
     }
   };
 
-  const devices = [
+  const statusTarefas = [
     {
-      title: 'Desktop',
-      value: '63',
-      icon: <LaptopMacIcon />,
+      title: 'Concluídas',
+      value: props.tarefasConcluidas,
+      icon: <AssignmentIcon />,
       color: theme.palette.primary.main
     },
     {
-      title: 'Tablet',
-      value: '15',
-      icon: <TabletMacIcon />,
+      title: 'Para Concluir',
+      value: props.tarefaParaConcluir,
+      icon: <AssignmentLateIcon color = 'error'/>,
       color: theme.palette.error.main
-    },
-    {
-      title: 'Mobile',
-      value: '23',
-      icon: <PhoneIphoneIcon />,
-      color: theme.palette.warning.main
     }
   ];
 
@@ -115,7 +108,7 @@ const UsersByDevice = props => {
             <RefreshIcon />
           </IconButton>
         }
-        title="Users By Device"
+        title="Tarefas"
       />
       <Divider />
       <CardContent>
@@ -126,18 +119,18 @@ const UsersByDevice = props => {
           />
         </div>
         <div className={classes.stats}>
-          {devices.map(device => (
+          {statusTarefas.map(tarefa => (
             <div
               className={classes.device}
-              key={device.title}
+              key={tarefa.title}
             >
-              <span className={classes.deviceIcon}>{device.icon}</span>
-              <Typography variant="body1">{device.title}</Typography>
+              <span className={classes.deviceIcon}>{tarefa.icon}</span>
+              <Typography variant="body1">{tarefa.title}</Typography>
               <Typography
-                style={{ color: device.color }}
+                style={{ color: tarefa.color }}
                 variant="h2"
               >
-                {device.value}%
+                {tarefa.value}%
               </Typography>
             </div>
           ))}
