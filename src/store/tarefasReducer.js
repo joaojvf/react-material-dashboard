@@ -14,39 +14,51 @@ const ACTIONS = {
 
 const ESTADO_INICIAL = {
   tarefas: [],
-  quantidade: 0
+  quantidade: 0,
+  percentualConcluido: 100
 };
 export const tarefaReducer = (state = ESTADO_INICIAL, action) => {
   switch (action.type) {
     case ACTIONS.LISTAR:
+      let obj = {
+        quantidade: action.tarefas.length,
+        tarefas: action.tarefas
+      }
       return {
         ...state,
         tarefas: action.tarefas,
-        quantidade: action.tarefas.length
+        quantidade: action.tarefas.length,
+        percentualConcluido: atualizaConcluidas(obj)
+
       };
     case ACTIONS.ADD:
       return {
         ...state,
         tarefas: [...state.tarefas, action.tarefa],
-        quantidade: action.tarefas.length
+        quantidade: action.tarefas.length,
+        percentualConcluido: atualizaConcluidas(state)
       };
     case ACTIONS.REMOVER:
       return {
         ...state,
         tarefas: state.tarefas.filter(tarefa => tarefa.id !== action.id),
-        quantidade: action.tarefas.length
+        quantidade: action.tarefas.length,
+        percentualConcluido: atualizaConcluidas(state)
       };
     case ACTIONS.UPDATE_STATUS:
       const lista = [...state.tarefas];
+
       lista.forEach(tarefa => {
         if (tarefa.id === action.id) {
           tarefa.done = true;
-        }
+        }        
       });
       return {
         ...state,
-        tarefas: lista
+        tarefas: lista,
+        percentualConcluido: atualizaConcluidas(state)
       };
+
     default:
       return state;
   }
@@ -88,6 +100,16 @@ export function salvar(tarefa) {
   };
 }
 
+export function atualizaConcluidas(state) {
+  let quantidadeTarefasConcluidas = 0;
+  state.tarefas.forEach(tarefa => {
+    if (tarefa.done) {
+      quantidadeTarefasConcluidas= quantidadeTarefasConcluidas +1;
+    }
+  });
+
+  return (quantidadeTarefasConcluidas / state.quantidade) * 100
+}
 export function deletar(id) {
   return dispatch => {
     http

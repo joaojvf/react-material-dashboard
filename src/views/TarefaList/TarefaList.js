@@ -47,6 +47,7 @@ const TarefaList = props => {
           deleteAction={props.deletar}
           alterarStatus={props.alterarStatus}
           tarefas={props.tarefas}
+          percentualConcluido=  {props.percentualConcluido}
         />
       </div>
       <Dialog open={props.openDialog} onClose={props.esconderMensagem}>
@@ -63,7 +64,7 @@ const TarefaList = props => {
 const mapStateToProps = state => ({
   tarefas: state.tarefas.tarefas,
   mensagem: state.mensagens.mensagem,
-  openDialog: state.mensagens.mostrarMensagem
+  openDialog: state.mensagens.mostrarMensagem,
 });
 
 const mapDispatchToProps = dispatch =>
